@@ -18,3 +18,5 @@
 2016/10/04
 
 放到git上作版本管控
+
+test the function of push
