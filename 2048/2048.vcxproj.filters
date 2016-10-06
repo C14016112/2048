@@ -24,19 +24,13 @@
     <ClCompile Include="Game.cpp">
       <Filter>原始程式檔</Filter>
     </ClCompile>
-    <ClCompile Include="Record.cpp">
-      <Filter>原始程式檔</Filter>
-    </ClCompile>
-    <ClCompile Include="Record_4tile.cpp">
-      <Filter>原始程式檔</Filter>
-    </ClCompile>
-    <ClCompile Include="Record_6tile.cpp">
-      <Filter>原始程式檔</Filter>
-    </ClCompile>
-    <ClCompile Include="Record_N_tile.cpp">
-      <Filter>原始程式檔</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
+      <Filter>原始程式檔</Filter>
+    </ClCompile>
+    <ClCompile Include="Record_4tile_Outside.cpp">
+      <Filter>原始程式檔</Filter>
+    </ClCompile>
+    <ClCompile Include="Record_4tile_Inside.cpp">
       <Filter>原始程式檔</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,30 +41,17 @@
     <ClInclude Include="Game.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
-    <ClInclude Include="Record.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
-    <ClInclude Include="Record_4tile.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
-    <ClInclude Include="Record_6tile.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
-    <ClInclude Include="Record_N_tile.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="data_record0.txt" />
-    <None Include="data_record1.txt" />
-    <None Include="data_record2.txt" />
-    <None Include="ReadMe.txt" />
-    <None Include="result.txt" />
+    <ClInclude Include="Record_4tile_Outside.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Record_4tile_Inside.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

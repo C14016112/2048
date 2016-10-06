@@ -5,16 +5,19 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "time.h"
-#include "Record.h"
+#include "assert.h"
+#include "Record_4tile_Outside.h"
+#include "Record_4tile_Inside.h"
+//#include "Record.h"
 
 #define LEARNING_RATE 0.0025
 
-double Evaluate(Board board, int action, Record & record);
-int FindBestAction(Board b, Record & record);
-void Learn_Evaluation(Board b1, int action, int score, Board b1_moved, Board b2, Record & record);
-void Write_Record(Record & record);
+double Evaluate(Board board, int action);
+int FindBestAction(Board b);
+void Learn_Evaluation(Board b1, int action, int score, Board b1_moved, Board b2);
+void Write_Record();
 //void Learn_Evaluation(stack<State>, Record &, Game game);
-void Read_Record(Record & record);
+void Read_Record();
 void MakeMoveTable();
 void GetDataFromMoveTable(int i, int j, int k, int l, int index[5]);
 void MoveLeft(Board & CurrentBoard, int & award);

@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include"Board.h"
-#include"time.h"
-#include"stdlib.h"
-#include"stdio.h"
+
 Board::Board()
 {
 	iBoardSize = 4;
@@ -46,24 +44,7 @@ void Board::swap(int index1, int index2)
 	setState(tmpstate1, index2);
 	setState(tmpstate2, index1);
 }
-//void Board::MoveUp(){
-//	for (int i = 0; i < 3; i++) Rotate();
-//	MoveLeft();
-//	Rotate();
-//}
-//void Board::MoveDown(){
-//	Rotate();
-//	MoveLeft();
-//	for (int i = 0; i < 3; i++)	Rotate();
-//}
-//void Board::MoveLeft(){
-//
-//}
-//void Board::MoveRight(){
-//	for (int i = 0; i < 2; i++) Rotate();
-//	MoveLeft();
-//	for (int i = 0; i < 2; i++) Rotate();
-//}
+
 void Board::Rotate(){
 	swap(0, 3);
 	swap(0, 15);

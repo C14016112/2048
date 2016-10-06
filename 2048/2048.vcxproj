@@ -63,28 +63,17 @@
     <ClCompile Include="2048 AI.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Record.cpp" />
-    <ClCompile Include="Record_4tile.cpp" />
-    <ClCompile Include="Record_6tile.cpp" />
-    <ClCompile Include="Record_N_tile.cpp" />
+    <ClCompile Include="Record_4tile_Inside.cpp" />
+    <ClCompile Include="Record_4tile_Outside.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Record.h" />
-    <ClInclude Include="Record_4tile.h" />
-    <ClInclude Include="Record_6tile.h" />
-    <ClInclude Include="Record_N_tile.h" />
+    <ClInclude Include="Record_4tile_Inside.h" />
+    <ClInclude Include="Record_4tile_Outside.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="data_record0.txt" />
-    <None Include="data_record1.txt" />
-    <None Include="data_record2.txt" />
-    <None Include="ReadMe.txt" />
-    <None Include="result.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

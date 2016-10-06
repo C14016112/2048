@@ -2,21 +2,28 @@
 #include "Game.h"
 
 int Move_Table[16*16*16*16*5] = {};
+Record_4tile_Inside record1;
+Record_4tile_Outside record2;
 
-double Evaluate(Board board, int action, Record & record)
+double Evaluate(Board board, int action)
 {
 	int award = 0;
 	Move(action, board, award);
-	return record.getData(board);
+	return record1.getScore(board) + record2.getScore(board);
+	//return record.getScore(board);
 }
 
 
-int FindBestAction(Board b, Record & record)
+int FindBestAction(Board b)
 {
 	double value[4];
 	int next_action = 1;
+	Board next_board;
+	int award = 0;
+	int another_action = 0;
+
 	for (int i = 1; i <= 4; i++){
-		value[i - 1] = Evaluate(b, i, record);
+		value[i - 1] = Evaluate(b, i);
 	}
 	if (value[0] == value[1] && value[0] == value[2] && value[0] == value[3] ){
 		next_action = rand() % 4 + 1;
@@ -28,14 +35,27 @@ int FindBestAction(Board b, Record & record)
 			}
 		}
 	}
+	
+	//check that the state after action is different
+	// if not, trying to find anther action
+	next_board.setState(b.getState());
+	Move(next_action, next_board, award);
+	another_action = next_action;
+	do{
+		another_action = another_action % 4 + 1; 
+		next_board.setState(b.getState());
+		Move(another_action, next_board, award);
+	}while(b.getState() == next_board.getState() && another_action != next_action);
+
+	next_action = another_action;
 	assert(next_action >= 1 && next_action <= 4);
 	return next_action;
 }
 
-void Learn_Evaluation(Board b1, int action, int score, Board b1_moved, Board b2, Record & record)
+void Learn_Evaluation(Board b1, int action, int score, Board b1_moved, Board b2)
 {
 	int next_action = 1;
-	next_action = FindBestAction(b2, record);
+	next_action = FindBestAction(b2);
 
 	/*
 	COMPUTE AFTERSTATE( s'', a_next)
@@ -43,7 +63,7 @@ void Learn_Evaluation(Board b1, int action, int score, Board b1_moved, Board b2,
 	int tmpaward = 0; // r_next
 	Board b2_moved; // s'_next
 	b2_moved.setState(b2);
-	Move(action, b2_moved, tmpaward);
+	Move(next_action, b2_moved, tmpaward);
 	
 	double next_value = 0;
 	double now_value = 0;
@@ -52,21 +72,24 @@ void Learn_Evaluation(Board b1, int action, int score, Board b1_moved, Board b2,
 		delta = LEARNING_RATE * now_value * -1;
 	}
 	else{
-		next_value = record.getData(b2_moved);
-		now_value = record.getData(b1_moved);
+		next_value = record1.getScore(b2_moved) + record2.getScore(b2_moved);
+		now_value = record1.getScore(b1_moved) + record2.getScore(b1_moved);
 		delta = LEARNING_RATE * ((double)tmpaward + next_value - now_value);
 	}
 		
-	for (int i = 1; i <= record.get_tablenumber(); i++){
-		double new_value = record.get_onetable_data(i, b1_moved) + delta;
-		record.set_onetable_Data(i, b1_moved, new_value);
+	for (int i = 0; i < 8; i++){
+		double new_value = record1.get_OneFeature_Score(b1_moved, i) + delta ;
+		record1.set_OneFeature_Score(b1_moved, i, new_value);
 	}
-	
+	for (int i = 0; i < 8; i++){
+		double new_value = record2.get_OneFeature_Score(b1_moved, i) + delta;
+		record2.set_OneFeature_Score(b1_moved, i, new_value);
+	}
 }
 
-void Write_Record(Record & record)
+void Write_Record()
 {
-	int tablenumber = record.get_tablenumber();
+	int tablenumber = 1;
 	for (int m = 1; m <= tablenumber; m++){
 		FILE * data;
 		errno_t err;
@@ -82,93 +105,12 @@ void Write_Record(Record & record)
 		else
 			printf("The file '%s' was opened\n", name);
 
-		if (m <= record.get_four_tile_tablenumber()){
-			for (int i = 0; i < 16; i++){
-				for (int j = 0; j < 16; j++){
-					for (int k = 0; k < 16; k++){
-						for (int l = 0; l < 16; l++){
-							int index[4] = { i, j, k, l };
-							fprintf(data, "%lf \n", record.get_onetable_data(m, index));
-						}
-					}
-				}
-			}
-		}
-		else
-		{
-			for (int i = 0; i < 16; i++){
-				for (int j = 0; j < 16; j++){
-					for (int k = 0; k < 16; k++){
-						for (int l = 0; l < 16; l++){
-							for (int level5 = 0; level5 < 16; level5++){
-								for (int level6 = 0; level6 < 16; level6++){
-									int index[6] = { i, j, k, l, level5, level6 };
-									fprintf(data, "%lf \n", record.get_onetable_data(m, index));
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		
-		
-		if (data)
-		{
-			if (fclose(data))
-			{
-				printf("The file '%s' was not closed\n", name);
-			}
-		}
-	}
-
-}
-
-void Read_Record(Record & record)
-{
-	int tablenumber = record.get_tablenumber();
-	for (int m = 1; m <= tablenumber; m++){
-		FILE * data;
-		errno_t err;
-		char name[30] = "data_record";
-		char number[20];
-		sprintf_s(number, "%d", m);
-		strcat_s(name, number);
-		char name2[] = ".txt";
-		strcat_s(name, name2);
-
-		if ((err = fopen_s(&data, name, "r")) != 0)
-			printf("The file '%s' was not opened\n", name);
-		else
-			printf("The file '%s' was opened\n", name);
-		if (m <= record.get_four_tile_tablenumber()){
-			for (int i = 0; i < 16; i++){
-				for (int j = 0; j < 16; j++){
-					for (int k = 0; k < 16; k++){
-						for (int l = 0; l < 16; l++){
-							double value = 0;
-							fscanf_s(data, "%lf", &value);
-							int index[4] = { i, j, k, l };
-							record.set_onetable_Data(m, index, value);
-						}
-					}
-				}
-			}
-		}
-		else{
-			for (int i = 0; i < 16; i++){
-				for (int j = 0; j < 16; j++){
-					for (int k = 0; k < 16; k++){
-						for (int l = 0; l < 16; l++){
-							for (int level5 = 0; level5 < 16; level5++){
-								for (int level6 = 0; level6 < 16; level6++){
-									double value = 0;
-									fscanf_s(data, "%lf", &value);
-									int index[6] = { i, j, k, l, level5, level6 };
-									record.set_onetable_Data(m, index, value);
-								}
-							}
-						}
+		for (int i = 0; i < 16; i++){
+			for (int j = 0; j < 16; j++){
+				for (int k = 0; k < 16; k++){
+					for (int l = 0; l < 16; l++){
+						int index[4] = { i, j, k, l };
+						fprintf(data, "%lf \n", record1.getScore(index));
 					}
 				}
 			}
@@ -182,7 +124,68 @@ void Read_Record(Record & record)
 			}
 		}
 	}
+
 }
+
+//void Read_Record(Record & record)
+//{
+//	int tablenumber = record.get_tablenumber();
+//	for (int m = 1; m <= tablenumber; m++){
+//		FILE * data;
+//		errno_t err;
+//		char name[30] = "data_record";
+//		char number[20];
+//		sprintf_s(number, "%d", m);
+//		strcat_s(name, number);
+//		char name2[] = ".txt";
+//		strcat_s(name, name2);
+//
+//		if ((err = fopen_s(&data, name, "r")) != 0)
+//			printf("The file '%s' was not opened\n", name);
+//		else
+//			printf("The file '%s' was opened\n", name);
+//		if (m <= record.get_four_tile_tablenumber()){
+//			for (int i = 0; i < 16; i++){
+//				for (int j = 0; j < 16; j++){
+//					for (int k = 0; k < 16; k++){
+//						for (int l = 0; l < 16; l++){
+//							double value = 0;
+//							fscanf_s(data, "%lf", &value);
+//							int index[4] = { i, j, k, l };
+//							record.set_onetable_Data(m, index, value);
+//						}
+//					}
+//				}
+//			}
+//		}
+//		else{
+//			for (int i = 0; i < 16; i++){
+//				for (int j = 0; j < 16; j++){
+//					for (int k = 0; k < 16; k++){
+//						for (int l = 0; l < 16; l++){
+//							for (int level5 = 0; level5 < 16; level5++){
+//								for (int level6 = 0; level6 < 16; level6++){
+//									double value = 0;
+//									fscanf_s(data, "%lf", &value);
+//									int index[6] = { i, j, k, l, level5, level6 };
+//									record.set_onetable_Data(m, index, value);
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+//		
+//		if (data)
+//		{
+//			if (fclose(data))
+//			{
+//				printf("The file '%s' was not closed\n", name);
+//			}
+//		}
+//	}
+//}
 
 void MakeMoveTable()
 {
