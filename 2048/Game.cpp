@@ -7,6 +7,7 @@ Record_4tile_Outside record2;
 
 double Evaluate(Board board, int action)
 {
+	// evaluate action 
 	int award = 0;
 	Move(action, board, award);
 	return record1.getScore(board) + record2.getScore(board);
@@ -67,12 +68,12 @@ void Learn_Evaluation(Board b1, int action, int score, Board b1_moved, Board b2)
 	double next_value = 0;
 	double now_value = 0;
 	double delta = 0;
+	now_value = record1.getScore(b1_moved) + record2.getScore(b1_moved);
 	if (b2.isFull() == true){
 		delta = LEARNING_RATE * now_value * -1;
 	}
 	else{
 		next_value = record1.getScore(b2_moved) + record2.getScore(b2_moved);
-		now_value = record1.getScore(b1_moved) + record2.getScore(b1_moved);
 		delta = LEARNING_RATE * ((double)tmpaward + next_value - now_value);
 	}
 		

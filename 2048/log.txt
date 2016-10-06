@@ -20,3 +20,36 @@ the best state is:
  3  6  10  2 
  2  1  2  1 
 
+
+Round =  500000
+the time is 12314.400000 
+ And the best result is 11852 
+the average score is 2017.045728 
+the best state is: 
+ 1  2  3  1 
+ 2  4  6  3 
+ 5  8  10  5 
+ 1  5  6  2 
+
+
+Round =  1000
+the time is 59.678000 
+ And the best result is 7276 
+the average score is 2698.232000 
+the best state is: 
+ 3  2  5  1 
+ 2  4  9  1 
+ 3  8  6  4 
+ 5  7  1  5 
+
+
+Round =  5000
+the time is 246.480000 
+ And the best result is 15396 
+the average score is 4618.325600 
+the best state is: 
+ 1  10  5  1 
+ 5  2  8  4 
+ 2  6  9  1 
+ 1  2  1  4 
+

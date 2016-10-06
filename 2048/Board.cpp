@@ -25,12 +25,10 @@ void Board::setState(unsigned long long int state){
 	iState = state; 
 }
 void Board::setState(unsigned long long int state, int index){
-	if (index > 15 || index < 0 || state < 0 || state > 15) { return; }
-	else{
-		unsigned long long int basenumber = 1;
-		for (int i = 0; i< index; i++) basenumber *= 16;
-		iState = iState + (-1 * getState(index) + state) * basenumber;
-	}
+	assert( index >= 0 && index < 16 && state >= 0 && state <= 15);
+	unsigned long long int basenumber = 1;
+	for (int i = 0; i< index; i++) basenumber *= 16;
+	iState = iState + (-1 * getState(index) + state) * basenumber;
 }
 void Board::setState(Board b){
 	iState = b.getState();
@@ -45,20 +43,6 @@ void Board::swap(int index1, int index2)
 	setState(tmpstate2, index1);
 }
 
-void Board::Rotate(){
-	swap(0, 3);
-	swap(0, 15);
-	swap(0, 12);
-	swap(1, 7);
-	swap(1, 14);
-	swap(1, 8);
-	swap(2, 11);
-	swap(2, 13);
-	swap(2, 4);
-	swap(5, 6);
-	swap(5, 10);
-	swap(5, 9);
-}
 void Board::addRandomNumber(){
 	int nZeroNumber = 0;
 	int iRandPosition;

@@ -46,8 +46,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	const int Round = 5000;
 	for (int i = 0; i < Round; i++){
 		
-		/*if(i % (Round / 10) == 0 )
-			printf("%d \n", i);*/
+		if(i % (Round / 10) == 0 )
+			printf("%d \n", i);
 		
 		Board board;
 		board.addRandomNumber();
