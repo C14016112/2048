@@ -4,14 +4,14 @@
 Record_4tile_Inside::Record_4tile_Inside()
 {
 	for (int i = 0 ;i < 4 ; i++){
-		index[0][i] = i;
-		index[1][i] = 12 + i;
-		index[2][i] = 4 * i;
-		index[3][i] = 4 * i + 3;
-		index[4][i] = 3 - i;
-		index[5][i] = 15 - i;
-		index[6][i] = 12 - 4 * i;
-		index[7][i] = 15 - 4 * i;
+		index[0][i] = i + 4;
+		index[1][i] = 13 - 4 * i;
+		index[2][i] = 2 + 4 * i;
+		index[3][i] = 11 - 4 * i;
+		index[4][i] = 7 - i;
+		index[5][i] = 1 + 4 * i;
+		index[6][i] = 8 + i;
+		index[7][i] = 14 - 4 * i;
 	}
 	for (int i = 0 ; i< 16 * 16 * 16 * 16; i++){
 		Data[i] = 0;
@@ -35,6 +35,7 @@ double Record_4tile_Inside::getScore(int inputindex[4]){
 }
 
 double Record_4tile_Inside::getScore(Board b){
+
 	double value = 0;
 	for (int i = 0 ; i< 8 ; i++){
 		int index1 = b.getState(index[i][0]);

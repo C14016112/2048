@@ -20,7 +20,6 @@ int FindBestAction(Board b)
 	int next_action = 1;
 	Board next_board;
 	int award = 0;
-	int another_action = 0;
 
 	for (int i = 1; i <= 4; i++){
 		value[i - 1] = Evaluate(b, i);
@@ -40,15 +39,15 @@ int FindBestAction(Board b)
 	// if not, trying to find anther action
 	next_board.setState(b.getState());
 	Move(next_action, next_board, award);
-	another_action = next_action;
-	do{
-		another_action = another_action % 4 + 1; 
-		next_board.setState(b.getState());
-		Move(another_action, next_board, award);
-	}while(b.getState() == next_board.getState() && another_action != next_action);
 
-	next_action = another_action;
+	while(next_board.getState() == b.getState() && b.isFull() == false){
+		next_action = next_action % 4 + 1;
+		next_board.setState(b.getState());
+		Move(next_action, next_board, award);
+	}
+	
 	assert(next_action >= 1 && next_action <= 4);
+
 	return next_action;
 }
 

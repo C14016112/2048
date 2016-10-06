@@ -20,3 +20,7 @@
 放到git上作版本管控
 
 test the function of push
+
+2016/10/06
+
+將有對稱性的table合成一張，時間為500次13秒。

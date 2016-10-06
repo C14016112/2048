@@ -30,6 +30,7 @@ public:
 	void set_OneFeature_Score(Board b, int no, double value);
 private:
 	double Data[16*16*16*16] ;
+	//int index[8][4];
 	int index[8][4];
 	int iUpperBound;
 };

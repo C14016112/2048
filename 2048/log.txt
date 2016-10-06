@@ -1,0 +1,22 @@
+
+Round =  5000
+the time is 201.643000 
+ And the best result is 11984 
+the average score is 3591.399200 
+the best state is: 
+ 2  1  8  1 
+ 2  6  7  3 
+ 3  4  10  4 
+ 1  2  3  1 
+
+
+Round =  5000
+the time is 223.285000 
+ And the best result is 12056 
+the average score is 3672.563200 
+the best state is: 
+ 1  2  3  4 
+ 4  8  4  7 
+ 3  6  10  2 
+ 2  1  2  1 
+

@@ -5,12 +5,12 @@ Record_4tile_Outside::Record_4tile_Outside()
 {
 	for (int i = 0 ;i < 4 ; i++){
 		index[0][i] = i;
-		index[1][i] = 12 + i;
-		index[2][i] = 4 * i;
+		index[1][i] = 15 - i;
+		index[2][i] = 12 - 4 * i;
 		index[3][i] = 4 * i + 3;
 		index[4][i] = 3 - i;
-		index[5][i] = 15 - i;
-		index[6][i] = 12 - 4 * i;
+		index[5][i] = 4 * i;
+		index[6][i] = 12 + i;
 		index[7][i] = 15 - 4 * i;
 	}
 	for (int i = 0 ; i< 16 * 16 * 16 * 16; i++){

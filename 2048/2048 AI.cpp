@@ -17,13 +17,20 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	srand(time(NULL));
 	FILE * result;
+	FILE * log;
 	
 	errno_t err;
+	errno_t err2;
 	
 	if ((err = fopen_s(&result, "result.txt", "w+")) != 0)
 		printf("The file 'result.txt' was not opened\n");
 	else
 		printf("The file 'result.txt' was opened\n");
+
+	if ((err2 = fopen_s(&log, "log.txt", "a+")) != 0)
+		printf("The file 'log.txt' was not opened\n");
+	else
+		printf("The file 'log.txt' was opened\n");
 	
 	double start;
 	double end;
@@ -36,14 +43,15 @@ int _tmain(int argc, _TCHAR* argv[])
 	//Read_Record(record);
 	
 
-	const int Round = 500;
+	const int Round = 5000;
 	for (int i = 0; i < Round; i++){
 		
 		/*if(i % (Round / 10) == 0 )
 			printf("%d \n", i);*/
 		
 		Board board;
-		
+		board.addRandomNumber();
+		board.addRandomNumber();
 		int score = 0 ;
 
 		bool isEnd = false;
@@ -55,7 +63,6 @@ int _tmain(int argc, _TCHAR* argv[])
 
 			Current_Board.setState(board);
 			int Action = FindBestAction(Current_Board);
-			system("pause");
 			int award = 0;
 			Current_Board_Moved.setState(Current_Board);
 			Move(Action, Current_Board_Moved, award);
@@ -69,23 +76,9 @@ int _tmain(int argc, _TCHAR* argv[])
 			}
 			else {	isEnd = true;}
 		
-			// the following is the random game, using to test the time and effect of AI
-			/*if(board.isFull() == true){
-				isEnd = true;
-			}
-			else{
-				board.addRandomNumber();
-				int award = 0;
-				Move(rand() % 4 + 1, board, award);
-				score += award;
-
-			}*/
-			Current_Board.Print();
-			printf("Action = %d \n", Action);
-			Current_Board_Moved.Print();
 		}
-		
-		fprintf(result, " %d \n", score);
+		if( i % (Round / 1000) == 0)
+			fprintf(result, " %d \n", score);
 
 		if(best_result < score){
 			best_result = score;
@@ -105,12 +98,19 @@ int _tmain(int argc, _TCHAR* argv[])
 	end = clock();
 	double finish;
 	finish = ( end - start ) / CLOCKS_PER_SEC;
-	printf("the time is %f \n And the best result is %d \n", finish, best_result);
-	printf("the average score is %f \n", averagescore);
-	printf("the best state is: \n");
+	fprintf_s(log, "\n");
+	fprintf_s(log, "Round =  %d\n", Round);
+	fprintf_s(log, "the time is %f \n And the best result is %d \n", finish, best_result);
+	fprintf_s(log, "the average score is %f \n", averagescore);
+	fprintf_s(log, "the best state is: \n");
 	Board best_board;
 	best_board.setState(best_state);
-	best_board.Print();
+	for (int i = 0 ; i< 16 ; i++){
+		fprintf_s(log, " %d ", best_board.getState(i));
+		if(i % 4 == 3)
+			fprintf_s(log, "\n");
+	}
+	fprintf_s(log, "\n");
 	system("pause");
 	return 0;
 }
