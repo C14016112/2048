@@ -16,9 +16,7 @@ unsigned long long int Board::getState(){
 unsigned long long int Board::getState(int index){
 	if (index < 0 || index > 15) { return NULL; }
 	else {
-		unsigned long long int basenumber = 1;
-		for (int i = 0; i< index; i++){ basenumber *= 16; }
-		return (iState / basenumber) % 16;
+		return (iState >> (index * 4) ) & 0xf;
 	}
 }
 void Board::setState(unsigned long long int state){
@@ -26,9 +24,7 @@ void Board::setState(unsigned long long int state){
 }
 void Board::setState(unsigned long long int state, int index){
 	assert( index >= 0 && index < 16 && state >= 0 && state <= 15);
-	unsigned long long int basenumber = 1;
-	for (int i = 0; i< index; i++) basenumber *= 16;
-	iState = iState + (-1 * getState(index) + state) * basenumber;
+	iState = iState + ( (-1 * getState(index) + state) << 4 * index );
 }
 void Board::setState(Board b){
 	iState = b.getState();
@@ -83,21 +79,4 @@ bool Board::isFull(){
 	return true;
 }
 
-//void Board::Move(int action){
-//	if (action == MOVEDOWN){
-//		MoveDown();
-//	}
-//	else if (action == MOVEUP){
-//		MoveUp();
-//	}
-//	else if (action == MOVERIGHT){
-//		MoveRight();
-//	}
-//	else if (action == MOVELEFT){
-//		MoveLeft();
-//	}
-//	else {
-//		exit(1);
-//	}
-//}
-//
+

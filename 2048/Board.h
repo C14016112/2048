@@ -39,7 +39,6 @@ public :
 	void setState(Board);
 	void swap(int, int);
 
-	void Rotate();
 	void addRandomNumber();
 	
 	void Print();

@@ -11,7 +11,6 @@ double Evaluate(Board board, int action)
 	int award = 0;
 	Move(action, board, award);
 	return record1.getScore(board) + record2.getScore(board);
-	//return record.getScore(board);
 }
 
 
@@ -78,32 +77,34 @@ void Learn_Evaluation(Board b1, int action, int score, Board b1_moved, Board b2)
 	}
 		
 	for (int i = 0; i < 8; i++){
-		double new_value = record1.get_OneFeature_Score(b1_moved, i) + delta ;
-		record1.set_OneFeature_Score(b1_moved, i, new_value);
+		double new_value1 = record1.get_OneFeature_Score(b1_moved, i) + delta ;
+		record1.set_OneFeature_Score(b1_moved, i, new_value1);
+
+		double new_value2 = record2.get_OneFeature_Score(b1_moved, i) + delta;
+		record2.set_OneFeature_Score(b1_moved, i, new_value2);
 	}
-	for (int i = 0; i < 8; i++){
-		double new_value = record2.get_OneFeature_Score(b1_moved, i) + delta;
-		record2.set_OneFeature_Score(b1_moved, i, new_value);
-	}
+	
+	
 }
 
 void Write_Record()
 {
-	int tablenumber = 1;
-	for (int m = 1; m <= tablenumber; m++){
 		FILE * data;
+		FILE * data2;
 		errno_t err;
-		char name[30] = "data_record";
-		char number[20];
-		sprintf_s(number, "%d", m);
-		strcat_s(name, number);
-		char name2[] = ".txt";
-		strcat_s(name, name2);
+		errno_t err2;
+		char name[30] = "data_record1.txt";
+		char name2[30] = "data_record2.txt";
 
-		if ((err = fopen_s(&data, name, "w+")) != 0)
+		if ((err = fopen_s(&data, name, "w")) != 0)
 			printf("The file '%s' was not opened\n", name);
 		else
 			printf("The file '%s' was opened\n", name);
+
+		if ((err2 = fopen_s(&data2, name2, "w")) != 0)
+			printf("The file '%s' was not opened\n", name2);
+		else
+			printf("The file '%s' was opened\n", name2);
 
 		for (int i = 0; i < 16; i++){
 			for (int j = 0; j < 16; j++){
@@ -111,6 +112,7 @@ void Write_Record()
 					for (int l = 0; l < 16; l++){
 						int index[4] = { i, j, k, l };
 						fprintf(data, "%lf \n", record1.getScore(index));
+						fprintf(data2, "%lf \n", record2.getScore(index));
 					}
 				}
 			}
@@ -123,69 +125,15 @@ void Write_Record()
 				printf("The file '%s' was not closed\n", name);
 			}
 		}
-	}
-
+		if (data2){
+			if(fclose(data2)){
+				printf("The file '%s' was not closed\n", name2);
+			}
+		}
 }
 
-//void Read_Record(Record & record)
-//{
-//	int tablenumber = record.get_tablenumber();
-//	for (int m = 1; m <= tablenumber; m++){
-//		FILE * data;
-//		errno_t err;
-//		char name[30] = "data_record";
-//		char number[20];
-//		sprintf_s(number, "%d", m);
-//		strcat_s(name, number);
-//		char name2[] = ".txt";
-//		strcat_s(name, name2);
-//
-//		if ((err = fopen_s(&data, name, "r")) != 0)
-//			printf("The file '%s' was not opened\n", name);
-//		else
-//			printf("The file '%s' was opened\n", name);
-//		if (m <= record.get_four_tile_tablenumber()){
-//			for (int i = 0; i < 16; i++){
-//				for (int j = 0; j < 16; j++){
-//					for (int k = 0; k < 16; k++){
-//						for (int l = 0; l < 16; l++){
-//							double value = 0;
-//							fscanf_s(data, "%lf", &value);
-//							int index[4] = { i, j, k, l };
-//							record.set_onetable_Data(m, index, value);
-//						}
-//					}
-//				}
-//			}
-//		}
-//		else{
-//			for (int i = 0; i < 16; i++){
-//				for (int j = 0; j < 16; j++){
-//					for (int k = 0; k < 16; k++){
-//						for (int l = 0; l < 16; l++){
-//							for (int level5 = 0; level5 < 16; level5++){
-//								for (int level6 = 0; level6 < 16; level6++){
-//									double value = 0;
-//									fscanf_s(data, "%lf", &value);
-//									int index[6] = { i, j, k, l, level5, level6 };
-//									record.set_onetable_Data(m, index, value);
-//								}
-//							}
-//						}
-//					}
-//				}
-//			}
-//		}
-//		
-//		if (data)
-//		{
-//			if (fclose(data))
-//			{
-//				printf("The file '%s' was not closed\n", name);
-//			}
-//		}
-//	}
-//}
+
+
 
 void MakeMoveTable()
 {
@@ -257,9 +205,11 @@ void MakeMoveTable()
 
 void GetDataFromMoveTable(int i, int j, int k, int l, int index[5])
 {
-	for (int m = 0 ; m< 5 ; m++){
-		index[m] = Move_Table[5 * i + 5 * j * 16 + 5 * k * 16 * 16 + 5 * l * 16 * 16 * 16 + m];
-	}
+	index[0] = Move_Table[5 * i + 5 * j * 16 + 5 * k * 16 * 16 + 5 * l * 16 * 16 * 16 + 0];
+	index[1] = Move_Table[5 * i + 5 * j * 16 + 5 * k * 16 * 16 + 5 * l * 16 * 16 * 16 + 1];
+	index[2] = Move_Table[5 * i + 5 * j * 16 + 5 * k * 16 * 16 + 5 * l * 16 * 16 * 16 + 2];
+	index[3] = Move_Table[5 * i + 5 * j * 16 + 5 * k * 16 * 16 + 5 * l * 16 * 16 * 16 + 3];
+	index[4] = Move_Table[5 * i + 5 * j * 16 + 5 * k * 16 * 16 + 5 * l * 16 * 16 * 16 + 4];
 }
 
 void MoveLeft(Board & CurrentBoard, int & award)

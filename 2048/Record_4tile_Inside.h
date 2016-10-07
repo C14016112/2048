@@ -33,6 +33,7 @@ private:
 	//int index[8][4];
 	int index[8][4];
 	int iUpperBound;
+	void Read_Record();
 };
 
 #endif

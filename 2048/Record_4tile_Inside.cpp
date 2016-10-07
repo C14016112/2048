@@ -16,8 +16,9 @@ Record_4tile_Inside::Record_4tile_Inside()
 	for (int i = 0 ; i< 16 * 16 * 16 * 16; i++){
 		Data[i] = 0;
 	}
+	
 	iUpperBound = 16;
-
+	Read_Record();
 }
 
 Record_4tile_Inside::~Record_4tile_Inside()
@@ -73,3 +74,40 @@ void Record_4tile_Inside::set_OneFeature_Score(Board b, int no, double value)
 
 }
 
+void Record_4tile_Inside::Read_Record()
+{
+	FILE * score_data;
+	errno_t err;
+	char name[30] = "data_record1.txt";
+	
+
+	if ((err = fopen_s(&score_data, name, "r")) != 0){
+		printf("The file '%s' was not opened\n", name);
+	}
+	else
+	{
+		printf("The file '%s' was opened\n", name);
+
+		for (int i = 0; i < 16; i++){
+			for (int j = 0; j < 16; j++){
+				for (int k = 0; k < 16; k++){
+					for (int l = 0; l < 16; l++){
+						double value = 0;
+						fscanf_s(score_data, "%lf", &value);
+						int position =0;
+						position = l + k * 16 + j * 16 *16 + i * 16 * 16 * 16;
+						Data[position] = value;
+					}
+				}
+			}
+		}
+		if (score_data)
+		{
+			if (fclose(score_data))
+			{
+				printf("The file '%s' was not closed\n", name);
+			}
+		}
+	}
+		
+}

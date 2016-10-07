@@ -38,12 +38,9 @@ int _tmain(int argc, _TCHAR* argv[])
 	unsigned long long int best_state = 0;
 	double averagescore = 0 ;
 	start = clock();
-	//Record record;
-	
-	//Read_Record(record);
-	
+	int movecount = 0;
 
-	const int Round = 5000;
+	const int Round = 1000;
 	for (int i = 0; i < Round; i++){
 		
 		if(i % (Round / 10) == 0 )
@@ -75,6 +72,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				board.setState(Next_Board);
 			}
 			else {	isEnd = true;}
+			movecount++;
 		
 		}
 		if( i % (Round / 1000) == 0)
@@ -95,12 +93,15 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	averagescore = averagescore / Round;
 	Write_Record();
+
 	end = clock();
 	double finish;
 	finish = ( end - start ) / CLOCKS_PER_SEC;
 	fprintf_s(log, "\n");
 	fprintf_s(log, "Round =  %d\n", Round);
+	fprintf_s(log, "Move count is %d \n", movecount);
 	fprintf_s(log, "the time is %f \n And the best result is %d \n", finish, best_result);
+	fprintf_s(log, "Move count per sec = %f move/sec \n", movecount / finish );
 	fprintf_s(log, "the average score is %f \n", averagescore);
 	fprintf_s(log, "the best state is: \n");
 	Board best_board;
